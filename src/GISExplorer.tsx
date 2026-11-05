@@ -121,7 +121,10 @@ export default function GISExplorer() {
         (!focusParty || r.partyId === focusParty) &&
         (nationalView || r.votes > 0),
     )
-    .sort((a, b) => b.votes - a.votes);
+    .sort((a, b) => {
+      const aggregate = (id: string) => id === "OTHER" || id === "-2";
+      return Number(aggregate(a.partyId)) - Number(aggregate(b.partyId)) || b.votes - a.votes;
+    });
   const seatRows = new Map(
     (council.data?.rows ?? []).map((r) => [r.partyId, r]),
   );
