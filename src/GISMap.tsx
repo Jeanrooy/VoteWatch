@@ -197,9 +197,10 @@ export default function GISMap({
         )
         .map((f) => {
           const r = mapResults?.[String(f.properties?.id)];
+          const selectedParty = r?.parties?.find((p) => p.id === focusParty);
           const color = focusParty
-            ? r?.available && r.leader?.id === focusParty
-              ? r.leader.color
+            ? r?.available && selectedParty
+              ? selectedParty.color
               : "#e1e7ef"
             : !r?.available
               ? "#c6d0de"
@@ -213,6 +214,13 @@ export default function GISMap({
             properties: {
               ...f.properties,
               color,
+              partyOpacity:
+                selectedParty && r?.available
+                  ? 0.18 +
+                    (0.82 * Math.min(100, Math.max(0, selectedParty.share))) /
+                      100
+                  : 0.55,
+              partyLeading: Boolean(focusParty && r?.leader?.id === focusParty),
               available: r?.available ?? false,
               leader:
                 r?.leader?.label ?? (r?.tie ? "Tied" : "No published result"),
@@ -303,7 +311,7 @@ export default function GISMap({
           progress: provinceData.data.reporting?.percent ?? null,
           leader: null,
           tie: false,
-          parties: provinceData.data.rows.slice(0, 3).map((p) => ({
+          parties: provinceData.data.rows.map((p) => ({
             id: p.partyId,
             label: p.label,
             color: p.color,
@@ -373,25 +381,33 @@ export default function GISMap({
               }}
               fillPaint={{
                 "fill-color": ["get", "color"],
-                "fill-opacity": national ? 0.88 : 0.74,
+                "fill-opacity": focusParty
+                  ? ["get", "partyOpacity"]
+                  : national
+                    ? 0.88
+                    : 0.74,
               }}
               linePaint={{
-                "line-color": "#fff",
-                "line-width": national
-                  ? [
-                      "interpolate",
-                      ["linear"],
-                      ["zoom"],
-                      3,
-                      0.4,
-                      6,
-                      0.8,
-                      10,
-                      1.4,
-                    ]
-                  : 1.4,
+                "line-color": focusParty
+                  ? ["case", ["get", "partyLeading"], "#294c3b", "#fff"]
+                  : "#fff",
+                "line-width": focusParty
+                  ? ["case", ["get", "partyLeading"], 2, 0.6]
+                  : national
+                    ? [
+                        "interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        3,
+                        0.4,
+                        6,
+                        0.8,
+                        10,
+                        1.4,
+                      ]
+                    : 1.4,
               }}
-              fillHoverPaint={{ "fill-opacity": 1 }}
+              fillHoverPaint={focusParty ? undefined : { "fill-opacity": 1 }}
             />
             {selection.vd && (
               <MapGeoJSON
@@ -490,12 +506,14 @@ export default function GISMap({
                     <HoverResults
                       name={hoverProvince.name}
                       result={provinceSummary}
+                      focusParty={focusParty}
                       loading={!national && provinceData.loading}
                     />
                   )}
                   <HoverResults
                     name={hoverCard.name.replace(/^[A-Z0-9]+ - /, "")}
                     result={hoverResult}
+                    focusParty={focusParty}
                   />
                 </div>
               </MapPopup>
@@ -575,12 +593,14 @@ export default function GISMap({
                 <HoverResults
                   name={hoverProvince.name}
                   result={provinceSummary}
+                  focusParty={focusParty}
                   loading={!national && provinceData.loading}
                 />
               )}
               <HoverResults
                 name={hoverCard.name.replace(/^[A-Z0-9]+ - /, "")}
                 result={hoverResult}
+                focusParty={focusParty}
               />
             </div>
             <div className="gis-touch-card-actions">
@@ -623,10 +643,15 @@ export default function GISMap({
             0% <i /> 100%
           </span>
         )}
+        {focusParty && (
+          <span className="gis-party-strength-key">
+            Light to dark: 0?100% vote share ? outlined: leading
+          </span>
+        )}
         <span>
           <i style={{ background: "#c6d0de" }} />{" "}
           {focusParty
-            ? "Other lead / tie / unavailable"
+            ? "Party result unavailable"
             : "No result / unavailable / tie"}
         </span>
       </div>
@@ -660,12 +685,22 @@ function HoverResults({
   name,
   result,
   loading = false,
+  focusParty,
 }: {
   name: string;
   result: FeatureResult | null | undefined;
   loading?: boolean;
+  focusParty?: string | null;
 }) {
   const progress = result?.progress;
+  const party = result?.parties?.find((p) => p.id === focusParty);
+  const displayed = focusParty
+    ? party
+      ? [party]
+      : []
+    : [...(result?.parties ?? [])]
+        .sort((a, b) => b.share - a.share)
+        .slice(0, 3);
   return (
     <section className="gis-hover-section">
       <div className="gis-hover-heading">
@@ -699,30 +734,47 @@ function HoverResults({
           <span>{progress != null ? `${Math.round(progress)}%` : "?"}</span>
         </div>
       </div>
-      {result?.available && result.parties?.length ? (
+      {focusParty && party && result?.available && (
+        <div className="gis-party-hover-stats">
+          <strong>{party.votes.toLocaleString("en-ZA")} votes</strong>
+          <span>
+            {party.votes === 0
+              ? "No votes published"
+              : result.leader?.id === focusParty
+                ? "Leading"
+                : result.tie
+                  ? "Tied lead / partial result"
+                  : "Not leading"}
+          </span>
+        </div>
+      )}
+      {result?.available && displayed.length ? (
         <div className="gis-hover-parties">
-          {[...result.parties]
-            .sort((a, b) => b.share - a.share)
-            .slice(0, 3)
-            .map((p) => (
-              <div key={p.id}>
-                <i style={{ background: p.color }} />
-                {p.logoUrl && (
-                  <img
-                    src={p.logoUrl}
-                    alt=""
-                    onError={(e) => {
-                      e.currentTarget.style.display = "none";
-                    }}
-                  />
-                )}
-                <span title={p.label}>{p.label}</span>
-                <strong>{p.share.toFixed(2)}%</strong>
-              </div>
-            ))}
+          {displayed.map((p) => (
+            <div key={p.id}>
+              <i style={{ background: p.color }} />
+              {p.logoUrl && (
+                <img
+                  src={p.logoUrl}
+                  alt=""
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                  }}
+                />
+              )}
+              <span title={p.label}>{p.label}</span>
+              <strong>{p.share.toFixed(2)}%</strong>
+            </div>
+          ))}
         </div>
       ) : (
-        <p>{loading ? "Loading results?" : "No published party results."}</p>
+        <p>
+          {focusParty && !loading
+            ? "Party result unavailable in published summary."
+            : loading
+              ? "Loading results?"
+              : "No published party results."}
+        </p>
       )}
     </section>
   );

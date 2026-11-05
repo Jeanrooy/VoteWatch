@@ -374,7 +374,7 @@ function featureSummary(result, expected, received, available = true) {
             share: leader.share,
           }
         : null,
-    parties: parties.slice(0, 3).map((p) => ({
+    parties: parties.map((p) => ({
       id: p.partyId,
       label: p.label,
       color: p.color,

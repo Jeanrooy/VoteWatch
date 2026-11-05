@@ -1703,3 +1703,28 @@
   height: 32px;
   flex-basis: 32px;
 }
+
+.gis-party-hover-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 9px;
+  color: #8296ae;
+  margin: 7px 0;
+}
+.gis-party-hover-stats strong {
+  font-weight: 500;
+  color: #58769b;
+}
+.gis-party-strength-key {
+  font-size: 9px;
+  color: #6e879d;
+}
+
+.gis-party-place-lead {
+  display: block;
+  font-size: 8px;
+  color: #57916e;
+  margin-top: 3px;
+}

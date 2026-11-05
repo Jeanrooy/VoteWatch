@@ -123,7 +123,10 @@ export default function GISExplorer() {
     )
     .sort((a, b) => {
       const aggregate = (id: string) => id === "OTHER" || id === "-2";
-      return Number(aggregate(a.partyId)) - Number(aggregate(b.partyId)) || b.votes - a.votes;
+      return (
+        Number(aggregate(a.partyId)) - Number(aggregate(b.partyId)) ||
+        b.votes - a.votes
+      );
     });
   const seatRows = new Map(
     (council.data?.rows ?? []).map((r) => [r.partyId, r]),
@@ -184,7 +187,11 @@ export default function GISExplorer() {
   const leadingPlaces = Object.entries(
     (nationalView ? data?.mapFeatures : data?.features) ?? {},
   )
-    .filter(([, r]) => r.available && r.leader?.id === focusParty)
+    .filter(
+      ([, r]) =>
+        r.available &&
+        r.parties?.some((p) => p.id === focusParty && p.votes > 0),
+    )
     .map(([id, r]) => {
       const m = reg?.municipalities.find((m) => m.id === id);
       const w = reg?.wards.find((w) => w.id === id);
@@ -194,7 +201,8 @@ export default function GISExplorer() {
           m?.name ??
           (w ? `Ward ${w.number}` : (r.stationName ?? `Voting district ${id}`)),
         kind: m ? "municipality" : w ? "ward" : "station",
-        share: r.leader!.share,
+        share: r.parties!.find((p) => p.id === focusParty)!.share,
+        leading: r.leader?.id === focusParty,
         progress: r.progress,
       };
     })
@@ -533,7 +541,7 @@ export default function GISExplorer() {
                       {focusParty && (
                         <section className="gis-party-leading-places">
                           <h4>
-                            Leading in {leadingPlaces.length}{" "}
+                            Published votes in {leadingPlaces.length}{" "}
                             {nationalView ||
                             (!selection.municipality && !selection.ward)
                               ? "municipalities"
@@ -542,23 +550,30 @@ export default function GISExplorer() {
                                 : "wards"}
                           </h4>
                           <p>
-                            Published vote leads in this view, not declared
-                            wins.
+                            Shading shows vote share; outlined areas have a
+                            published lead.
                           </p>
                           {leadingPlaces.map((p) => (
                             <button
                               key={p.id}
                               onClick={() => navigate(p.kind, p.id)}
                             >
-                              <span>{p.name.replace(/^[A-Z0-9]+ - /, "")}</span>
+                              <span>
+                                {p.name.replace(/^[A-Z0-9]+ - /, "")}
+                                {p.leading && (
+                                  <small className="gis-party-place-lead">
+                                    Leading
+                                  </small>
+                                )}
+                              </span>
                               <strong>{p.share.toFixed(2)}%</strong>
                               <ChevronRight size={13} />
                             </button>
                           ))}
                           {!leadingPlaces.length && (
                             <p>
-                              No published leads in this view. Use the map or
-                              breadcrumb to explore other locations.
+                              No published party votes in this view. Use the map
+                              or breadcrumb to explore other locations.
                             </p>
                           )}
                         </section>
