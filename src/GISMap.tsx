@@ -47,6 +47,92 @@ function Camera({ bounds, reset }: { bounds: Bounds; reset: number }) {
   }, [map, isLoaded, ...bounds, reset]);
   return null;
 }
+type PlaceLabel = {
+  id: string;
+  name: string;
+  kind: string;
+  center: [number, number];
+  priority: number;
+};
+function PlaceNames({
+  places,
+  onSelect,
+}: {
+  places: PlaceLabel[];
+  onSelect: (place: PlaceLabel) => void;
+}) {
+  const { map, isLoaded } = useMap();
+  const [visible, setVisible] = useState<PlaceLabel[]>([]);
+  useEffect(() => {
+    if (!map || !isLoaded) return;
+    const update = () => {
+      const zoom = map.getZoom(),
+        bounds = map.getBounds(),
+        canvas = map.getCanvas();
+      const width = canvas.clientWidth,
+        height = canvas.clientHeight;
+      const occupied: { x: number; y: number; w: number }[] = [];
+      const next: PlaceLabel[] = [];
+      for (const place of [...places].sort(
+        (a, b) => a.priority - b.priority || a.name.localeCompare(b.name),
+      )) {
+        if (place.priority === 2 && zoom < 6.2) continue;
+        if (place.kind === "ward" && zoom < 7) continue;
+        if (!bounds.contains(place.center)) continue;
+        const point = map.project(place.center),
+          w = Math.min(150, place.name.length * 5.5 + 12);
+        if (
+          point.x < w / 2 + 5 ||
+          point.x > width - w / 2 - 5 ||
+          point.y < 55 ||
+          point.y > height - 25
+        )
+          continue;
+        if (
+          occupied.some(
+            (o) =>
+              Math.abs(o.x - point.x) < (o.w + w) / 2 + 12 &&
+              Math.abs(o.y - point.y) < 30,
+          )
+        )
+          continue;
+        occupied.push({ x: point.x, y: point.y, w });
+        next.push(place);
+        if (next.length >= (width < 600 ? 18 : 45)) break;
+      }
+      setVisible(next);
+    };
+    update();
+    map.on("moveend", update);
+    map.on("resize", update);
+    return () => {
+      map.off("moveend", update);
+      map.off("resize", update);
+    };
+  }, [map, isLoaded, places]);
+  return (
+    <>
+      {visible.map((place) => (
+        <MapMarker
+          key={place.kind + place.id}
+          longitude={place.center[0]}
+          latitude={place.center[1]}
+        >
+          <MarkerContent>
+            <button
+              className={`gis-place-name ${place.kind === "ward" ? "gis-place-name-ward" : ""}`}
+              onClick={() => onSelect(place)}
+              aria-label={`Explore ${place.name}`}
+            >
+              {place.name}
+            </button>
+          </MarkerContent>
+        </MapMarker>
+      ))}
+    </>
+  );
+}
+
 export default function GISMap({
   registry,
   selection,
@@ -272,6 +358,24 @@ export default function GISMap({
       }) ?? [],
     [geometry],
   );
+  const placeNames = useMemo<PlaceLabel[]>(() => {
+    const municipalities = registry.municipalities
+      .filter((m) => !province || m.provinceId === province.id)
+      .filter((m) => !municipality || m.id === municipality.id)
+      .map((m) => ({
+        id: m.id,
+        name: m.name.replace(/^[A-Z0-9]+ - /, ""),
+        kind: "municipality",
+        center: m.center,
+        priority: m.isMetro ? 0 : national ? 2 : 1,
+      }));
+    const local = municipality
+      ? labelFeatures
+          .filter((f) => f.kind === "ward")
+          .map((f) => ({ ...f, priority: 3 }))
+      : [];
+    return [...municipalities, ...local];
+  }, [registry, province?.id, municipality?.id, labelFeatures, national]);
   const legend = [
     ...new globalThis.Map(
       Object.values(mapResults ?? {})
@@ -459,37 +563,14 @@ export default function GISMap({
                 linePaint={{ "line-color": "#173d78", "line-width": 3 }}
               />
             )}
-            {labels &&
-              !national &&
-              labelFeatures.map((f) => (
-                <MapMarker
-                  key={f.id}
-                  longitude={f.center[0]}
-                  latitude={f.center[1]}
-                >
-                  <MarkerContent>
-                    <button
-                      className={`gis-feature-label ${f.kind === "ward" ? "ward-label" : ""}`}
-                      onClick={() =>
-                        openLocation(
-                          f.kind,
-                          f.id,
-                          f.name,
-                          f.center[0],
-                          f.center[1],
-                        )
-                      }
-                      aria-label={`Explore ${f.name}`}
-                    >
-                      {f.kind === "ward"
-                        ? f.name.replace("Ward ", "")
-                        : f.kind === "station"
-                          ? f.id
-                          : f.name.replace(/^[A-Z0-9]+ - /, "")}
-                    </button>
-                  </MarkerContent>
-                </MapMarker>
-              ))}
+            {labels && (
+              <PlaceNames
+                places={placeNames}
+                onSelect={(p) =>
+                  openLocation(p.kind, p.id, p.name, p.center[0], p.center[1])
+                }
+              />
+            )}
             {hoverCard && !touchCard && (
               <MapPopup
                 longitude={hoverCard.longitude}
