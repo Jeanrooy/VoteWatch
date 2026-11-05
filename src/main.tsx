@@ -1,3 +1,4 @@
+import "./analytics";
 import React, { lazy, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
