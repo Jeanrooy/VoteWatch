@@ -2,13 +2,34 @@
 <html lang="en-ZA">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      try { document.documentElement.dataset.theme = localStorage.getItem('votewatch-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch { document.documentElement.dataset.theme = 'light'; }
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0c1427" />
     <meta
       name="description"
       content="Explore South Africa's local government elections. Interactive maps, party results, seats and council coverage."
     />
-    <title>Vote Watch | South Africa</title>
+    <title>VoteWatch | South Africa</title>
+    <link rel="canonical" href="https://votewatch.co.za/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="VoteWatch" />
+    <meta property="og:locale" content="en_ZA" />
+    <meta property="og:url" content="https://votewatch.co.za/" />
+    <meta property="og:title" content="VoteWatch | South Africa's election map" />
+    <meta property="og:description" content="Explore local election results, party vote shares, seats and councils across South Africa." />
+    <meta property="og:image" content="https://votewatch.co.za/social-share.png" />
+    <meta property="og:image:secure_url" content="https://votewatch.co.za/social-share.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="VoteWatch national election dashboard with South African municipality results and party vote shares. Snapshot of partial results on 5 November 2026." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="VoteWatch | South Africa's election map" />
+    <meta name="twitter:description" content="Explore local election results, party vote shares, seats and councils across South Africa." />
+    <meta name="twitter:image" content="https://votewatch.co.za/social-share.png" />
+    <meta name="twitter:image:alt" content="VoteWatch national election dashboard, showing partial results captured on 5 November 2026." />
 
   </head>
   <body>

@@ -1,4 +1,4 @@
-# Vote Watch
+# VoteWatch
 
 [**votewatch.co.za**](https://votewatch.co.za)
 
@@ -8,12 +8,13 @@ South African local election results on an interactive map. Explore provinces, m
 - Background updates every 10 seconds, preserving the current map and scroll position.
 - Party maps with location drill-down and shareable links.
 - Desktop sidebar and mobile tap-to-explore results cards.
+- Light and dark themes with a saved preference; select the sun/moon button in the header.
 
 ## Screenshots
 
 ### National results
 
-![Vote Watch desktop dashboard](docs/screenshots/dashboard-desktop.png)
+![VoteWatch desktop dashboard](docs/screenshots/dashboard-desktop.png)
 
 ### Party view
 
@@ -21,7 +22,7 @@ South African local election results on an interactive map. Explore provinces, m
 
 ### Mobile
 
-<img src="docs/screenshots/dashboard-mobile.png" alt="Vote Watch mobile dashboard" width="300" />
+<img src="docs/screenshots/dashboard-mobile.png" alt="VoteWatch mobile dashboard" width="300" />
 <img src="docs/screenshots/mobile-tap.png" alt="Mobile location card with province and municipality actions" width="300" />
 
 Screenshots show partial results captured on 5 November 2026.
