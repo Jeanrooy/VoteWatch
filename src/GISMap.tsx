@@ -1,3 +1,4 @@
+import { useTheme } from "./theme";
 import { useEffect, useMemo, useState } from "react";
 import { booleanPointInPolygon } from "@turf/boolean-point-in-polygon";
 import type { FeatureCollection, Geometry } from "geojson";
@@ -165,6 +166,7 @@ export default function GISMap({
   revision: number;
   focusParty?: string | null;
 }) {
+  const { theme } = useTheme();
   const [reset, setReset] = useState(0),
     [hover, setHover] = useState("");
   const [touchCard, setTouchCard] = useState(
@@ -544,7 +546,7 @@ export default function GISMap({
         {geometry ? (
           <Map
             blank
-            theme="light"
+            theme={theme}
             center={[25, -29]}
             zoom={4.6}
             minZoom={3}
@@ -595,7 +597,9 @@ export default function GISMap({
               linePaint={{
                 "line-color": focusParty
                   ? ["case", ["get", "partyLeading"], "#294c3b", "#fff"]
-                  : "#fff",
+                  : theme === "dark"
+                    ? "#53647a"
+                    : "#fff",
                 "line-width": focusParty
                   ? ["case", ["get", "partyLeading"], 2, 0.6]
                   : national

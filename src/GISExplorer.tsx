@@ -1,3 +1,4 @@
+import { ThemeToggle } from "./theme";
 import { useEffect, useRef, useState } from "react";
 import {
   ChevronDown,
@@ -321,7 +322,14 @@ export default function GISExplorer() {
       <div className="panel-heading">
         <div>
           <h2>
-            <span className="public-dot" /> Vote Watch
+            <span className="public-dot" />{" "}
+            <a
+              href="/"
+              className="gis-home-link"
+              aria-label="VoteWatch national map"
+            >
+              VoteWatch
+            </a>
           </h2>
         </div>
         <div
@@ -344,6 +352,7 @@ export default function GISExplorer() {
           ))}
         </div>
         <div className="public-actions">
+          <ThemeToggle />
           <a
             className="gis-official-link"
             href="https://results.elections.org.za/dashboards/lge/"

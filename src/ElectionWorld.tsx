@@ -1,3 +1,4 @@
+import { ThemeToggle } from "./theme";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -525,11 +526,12 @@ export default function ElectionWorld() {
   return (
     <div className="world-app">
       <header className="world-header">
+        <ThemeToggle />
         <a className="world-brand" href="/">
           <span>
             <Vote size={23} />
           </span>
-          election<span>observer</span>
+          VoteWatch
           <b>LAB / 03</b>
         </a>
         <div className="world-header-center">
