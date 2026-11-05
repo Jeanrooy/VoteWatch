@@ -645,7 +645,7 @@ export default function GISMap({
         )}
         {focusParty && (
           <span className="gis-party-strength-key">
-            Light to dark: 0?100% vote share ? outlined: leading
+            Light to dark: 0-100% vote share; outlined: leading
           </span>
         )}
         <span>
