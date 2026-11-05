@@ -754,7 +754,7 @@ export default function GISMap({
         target="_blank"
         rel="noreferrer"
       >
-        Place names: ? OpenStreetMap contributors
+        Place names: &copy; OpenStreetMap contributors
       </a>
       <div className="gis-map-key">
         <strong>
