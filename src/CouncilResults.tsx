@@ -257,7 +257,7 @@ export default function CouncilResults({
                 <span>IEC “Leading” and “Control” counters</span>
               </div>
               <div className="table-scroll">
-                <table>
+                <table className="responsive-results-table" role="table">
                   <thead>
                     <tr>
                       <th>PARTY</th>
@@ -270,8 +270,8 @@ export default function CouncilResults({
                   </thead>
                   <tbody>
                     {data.rows.map((p) => (
-                      <tr key={p.partyId}>
-                        <td>
+                      <tr role="row" key={p.partyId}>
+                        <td data-label="Party" role="cell">
                           <div className="council-party-cell">
                             <Logo party={p} />
                             <span>
@@ -284,13 +284,21 @@ export default function CouncilResults({
                             </span>
                           </div>
                         </td>
-                        <td>{n(p.wardSeats)}</td>
-                        <td>{n(p.prSeats)}</td>
-                        <td>
+                        <td data-label="Ward seats" role="cell">
+                          {n(p.wardSeats)}
+                        </td>
+                        <td data-label="PR seats" role="cell">
+                          {n(p.prSeats)}
+                        </td>
+                        <td data-label="Total seats" role="cell">
                           <strong>{n(p.totalSeats)}</strong>
                         </td>
-                        <td>{n(p.councilsLeading)}</td>
-                        <td>{n(p.councilsControl)}</td>
+                        <td data-label="Councils leading" role="cell">
+                          {n(p.councilsLeading)}
+                        </td>
+                        <td data-label="Control" role="cell">
+                          {n(p.councilsControl)}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -347,7 +355,10 @@ export default function CouncilResults({
                 </label>
               </div>
               <div className="council-watch-scroll">
-                <table>
+                <table
+                  className="responsive-results-table council-watch-table"
+                  role="table"
+                >
                   <thead>
                     <tr>
                       <th>COUNCIL</th>
@@ -360,8 +371,8 @@ export default function CouncilResults({
                   </thead>
                   <tbody>
                     {rows.map((c) => (
-                      <tr key={c.id}>
-                        <td>
+                      <tr role="row" key={c.id}>
+                        <td data-label="Council" role="cell">
                           <button
                             className="council-name"
                             onClick={() => navigate(c)}
@@ -369,7 +380,7 @@ export default function CouncilResults({
                             {c.name.replace(/^[A-Z0-9]+ - /, "")}
                           </button>
                         </td>
-                        <td>
+                        <td data-label="Seat leader" role="cell">
                           {c.seatLeader ? (
                             <span className="council-leader">
                               <i style={{ background: c.seatLeader.color }} />
@@ -384,10 +395,10 @@ export default function CouncilResults({
                             </span>
                           )}
                         </td>
-                        <td>
+                        <td data-label="Allocated" role="cell">
                           {n(c.seatsAllocated)} / {n(c.seatsExpected)}
                         </td>
-                        <td>
+                        <td data-label="Majority" role="cell">
                           {n(c.majorityThreshold)}
                           {c.gap !== null && c.gap > 0 && (
                             <small className="council-gap">
@@ -395,12 +406,12 @@ export default function CouncilResults({
                             </small>
                           )}
                         </td>
-                        <td>
+                        <td data-label="Status" role="cell">
                           <span className={`council-status ${c.status}`}>
                             {statusLabels[c.status] ?? c.status}
                           </span>
                         </td>
-                        <td>
+                        <td data-label="Explore" role="cell">
                           <button
                             className="icon-button"
                             onClick={() => navigate(c)}

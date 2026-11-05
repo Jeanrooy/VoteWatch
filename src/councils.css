@@ -683,3 +683,223 @@
   color: #42638f;
   line-height: 1;
 }
+
+/* Contain tables within their grid tracks instead of widening mobile pages. */
+.council-tables {
+  grid-template-columns: minmax(0, 1fr);
+}
+.council-tables > section {
+  min-width: 0;
+  max-width: 100%;
+}
+.council-results .table-scroll,
+.council-watch-scroll {
+  width: 100%;
+  max-width: 100%;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #bcd5c6 #f4f8f5;
+}
+.council-results-heading > div {
+  min-width: 0;
+}
+.council-results-heading > button {
+  flex-shrink: 0;
+}
+.council-source > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.council-party-cell > span {
+  min-width: 0;
+}
+.council-results-heading h2 {
+  overflow-wrap: anywhere;
+}
+.gis-back-to-map {
+  min-height: 44px;
+  width: fit-content;
+}
+.council-list-tools select {
+  max-width: 100%;
+  min-height: 40px;
+}
+.council-list-tools > label:first-child {
+  min-height: 40px;
+  min-width: 0;
+}
+.council-metro-filter {
+  min-height: 40px;
+}
+.council-summary-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+.council-summary-grid > div {
+  min-width: 0;
+}
+.council-summary-grid strong {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 1100px) {
+  .council-summary-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .council-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .council-results-heading {
+    padding: 16px;
+  }
+  .council-results-heading p {
+    font-size: 11px;
+    line-height: 1.6;
+  }
+  .council-summary-grid strong {
+    font-size: clamp(18px, 5.5vw, 23px);
+  }
+  .responsive-results-table {
+    display: block;
+    width: 100%;
+    white-space: normal;
+    border-collapse: separate;
+  }
+  .responsive-results-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .responsive-results-table tbody {
+    display: grid;
+    gap: 10px;
+    padding: 0 14px 14px;
+  }
+  .responsive-results-table tbody tr {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px 10px;
+    position: relative;
+    padding: 13px;
+    border: 1px solid #e1eaf3;
+    border-radius: 9px;
+    background: #fff;
+  }
+  .council-results .responsive-results-table td,
+  .gis-results-table .responsive-results-table td {
+    display: block;
+    width: auto;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+    font-size: 13px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .responsive-results-table td:before {
+    content: attr(data-label);
+    display: block;
+    font-size: 9px;
+    line-height: 1.4;
+    font-weight: 400;
+    color: #8297b2;
+    margin-bottom: 5px;
+  }
+  .responsive-results-table td:first-child {
+    grid-column: 1/-1;
+    padding-bottom: 10px !important;
+    border-bottom: 1px solid #e8eef5 !important;
+  }
+  .responsive-results-table td:first-child:before {
+    display: none;
+  }
+  .council-party-cell strong,
+  .gis-table-party strong {
+    font-size: 12px;
+  }
+  .council-party-cell small,
+  .gis-table-party small {
+    font-size: 10px;
+    white-space: normal;
+    max-width: none;
+    line-height: 1.5;
+  }
+  .council-results .table-scroll,
+  .gis-results-table .table-scroll {
+    max-height: none;
+    overflow: visible;
+  }
+  .council-watch-scroll {
+    max-height: 65svh;
+    overflow: auto;
+  }
+  .council-watch-table tbody tr {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .council-watch-table td:first-child {
+    padding-right: 34px !important;
+  }
+  .council-name {
+    font-size: 13px;
+    line-height: 1.5;
+    min-height: 32px;
+    white-space: normal;
+  }
+  .council-watch-table td:last-child {
+    position: absolute;
+    top: 7px;
+    right: 5px;
+  }
+  .council-watch-table td:last-child:before {
+    display: none;
+  }
+  .council-watch-table td:last-child button {
+    width: 44px;
+    height: 44px;
+  }
+  .council-leader {
+    flex-wrap: wrap;
+    font-size: 11px;
+    gap: 5px;
+  }
+  .council-status {
+    font-size: 9px;
+    white-space: normal;
+    line-height: 1.4;
+  }
+  .council-muted {
+    font-size: 11px;
+  }
+  .council-list-tools {
+    padding: 0 16px 12px;
+  }
+  .council-seat-visual > div:first-child {
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .council-source {
+    font-size: 10px;
+    line-height: 1.6;
+  }
+  .council-definitions p {
+    font-size: 10px;
+    line-height: 1.7;
+  }
+  .gis-results-table .gis-section-title {
+    flex-wrap: wrap;
+  }
+  .gis-results-table .button {
+    min-height: 40px;
+  }
+  .gis-results-table .responsive-results-table td:first-child {
+    width: auto;
+  }
+  .council-watch-scroll tbody {
+    padding-bottom: 12px;
+  }
+}

@@ -1,3 +1,4 @@
+import { ArrowLeft } from "lucide-react";
 import PublicExplorer from "./PublicExplorer";
 import CouncilResults from "./CouncilResults";
 
@@ -12,7 +13,7 @@ export default function App() {
       {councils ? (
         <>
           <a className="gis-back-to-map" href={mapURL.pathname + mapURL.search}>
-            ? Back to map
+            <ArrowLeft size={16} aria-hidden="true" /> Back to map
           </a>
           <CouncilResults />
         </>

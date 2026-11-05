@@ -127,6 +127,12 @@ export default function GISExplorer() {
   );
   const metric = (n: number | null | undefined) =>
     n == null ? "\u2014" : number(n);
+  function mapLink() {
+    const u = new URL(location.href);
+    u.searchParams.delete("detail");
+    u.searchParams.set("view", "official");
+    return u.pathname + u.search;
+  }
   function detailLink(kind: "parties" | "councils") {
     const u = new URL(location.href);
     if (kind === "councils") {
@@ -602,10 +608,7 @@ export default function GISExplorer() {
           )}
           {allParties && (
             <>
-              <a
-                className="gis-back-to-map"
-                href={detailLink("parties").replace(/[?&]detail=parties/, "")}
-              >
+              <a className="gis-back-to-map" href={mapLink()}>
                 <ArrowLeft size={14} /> Back to map
               </a>
               <section className="gis-results-table">
@@ -640,7 +643,7 @@ export default function GISExplorer() {
                         : "Published ward + municipal PR summary. Select an individual ballot to compare the same contest."}
                 </div>
                 <div className="table-scroll">
-                  <table>
+                  <table className="responsive-results-table" role="table">
                     <thead>
                       <tr>
                         <th>PARTY / CANDIDATE</th>
@@ -654,8 +657,8 @@ export default function GISExplorer() {
                     <tbody>
                       {available &&
                         data!.rows.map((r) => (
-                          <tr key={r.partyId}>
-                            <td>
+                          <tr role="row" key={r.partyId}>
+                            <td data-label="Party / candidate" role="cell">
                               <div className="gis-table-party">
                                 <PartyLogo row={r} />
                                 <span>
@@ -668,15 +671,19 @@ export default function GISExplorer() {
                                 </span>
                               </div>
                             </td>
-                            <td>{number(r.votes)}</td>
-                            <td>{r.share.toFixed(2)}%</td>
-                            <td>
+                            <td data-label="Valid votes" role="cell">
+                              {number(r.votes)}
+                            </td>
+                            <td data-label="Vote share" role="cell">
+                              {r.share.toFixed(2)}%
+                            </td>
+                            <td data-label="Seats" role="cell">
                               {metric(seatRows.get(r.partyId)?.totalSeats)}
                             </td>
-                            <td>
+                            <td data-label="Councils leading" role="cell">
                               {metric(seatRows.get(r.partyId)?.councilsLeading)}
                             </td>
-                            <td>
+                            <td data-label="Control" role="cell">
                               {metric(seatRows.get(r.partyId)?.councilsControl)}
                             </td>
                           </tr>
