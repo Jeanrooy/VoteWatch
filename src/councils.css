@@ -1,0 +1,685 @@
+.council-results {
+  border-top: 1px solid #dfe8f5;
+  background: #fff;
+  margin-top: 15px;
+  min-width: 0;
+}
+.council-results-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 23px 21px;
+  gap: 15px;
+}
+.council-eyebrow {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 1.3px;
+  font-weight: 600;
+  color: #7890b3;
+  margin-bottom: 9px;
+}
+.council-results-heading h2 {
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.6px;
+  color: #29456d;
+}
+.council-results-heading p {
+  font-size: 11px;
+  color: #8095b4;
+  line-height: 1.8;
+  margin-top: 8px;
+}
+.council-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  padding: 0 23px 22px;
+}
+.council-summary-grid > div {
+  border: 1px solid #dfe8f5;
+  background: #f8faff;
+  border-radius: 9px;
+  padding: 16px 13px;
+}
+.council-summary-grid span {
+  font-size: 9px;
+  color: #6f88ab;
+  display: block;
+}
+.council-summary-grid strong {
+  font-size: 24px;
+  letter-spacing: -0.6px;
+  font-weight: 600;
+  color: #2b4e7e;
+  display: block;
+  margin: 12px 0 7px;
+  font-variant-numeric: tabular-nums;
+}
+.council-summary-grid small {
+  font-size: 8px;
+  color: #8a9fbc;
+  line-height: 1.6;
+  display: block;
+}
+.council-summary-grid > div:first-child {
+  background: #142b4e;
+  border-color: #142b4e;
+}
+.council-summary-grid > div:first-child strong {
+  color: #e3edff;
+}
+.council-summary-grid > div:first-child span,
+.council-summary-grid > div:first-child small {
+  color: #a1b8db;
+}
+.council-seat-visual {
+  padding: 0 23px 23px;
+}
+.council-seat-visual > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10px;
+  gap: 15px;
+}
+.council-seat-visual strong {
+  font-weight: 550;
+  color: #5275a3;
+}
+.council-seat-visual span {
+  color: #8a9fbd;
+  font-size: 9px;
+}
+.council-seat-track {
+  display: flex;
+  height: 18px;
+  background: #e8eef7;
+  position: relative;
+  margin: 13px 0 10px;
+  border-radius: 4px;
+}
+.council-seat-track > span {
+  height: 100%;
+  display: block;
+}
+.council-seat-track > span:first-child {
+  border-radius: 4px 0 0 4px;
+}
+.council-majority-line {
+  position: absolute;
+  top: -5px;
+  bottom: -5px;
+  width: 2px;
+  background: #102c57;
+  border: 1px solid white;
+  box-sizing: content-box;
+}
+.council-seat-visual p {
+  font-size: 9px;
+  color: #8d9fba;
+  line-height: 1.8;
+}
+.council-tables {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 23px;
+  padding-bottom: 22px;
+}
+.council-subheading {
+  padding: 16px 23px 14px;
+  border-top: 1px solid #e4ecf7;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+.council-subheading h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #45668f;
+}
+.council-subheading > span {
+  font-size: 9px;
+  color: #8ba0bd;
+}
+.council-results table {
+  white-space: nowrap;
+}
+.council-results th {
+  font-size: 8px;
+  padding: 12px 19px;
+}
+.council-results td {
+  font-size: 11px;
+  padding: 12px 19px;
+  color: #56769f;
+  font-variant-numeric: tabular-nums;
+}
+.council-results td:first-child {
+  width: auto;
+}
+.council-party-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.council-party-cell strong {
+  font-size: 11px;
+  font-weight: 600;
+  color: #466792;
+}
+.council-party-cell small {
+  display: block;
+  max-width: 230px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 8px;
+  color: #91a5bf;
+  margin-top: 4px;
+}
+.council-logo {
+  width: 31px;
+  height: 31px;
+  border: 1px solid #e0e9f6;
+  border-radius: 6px;
+  padding: 3px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.council-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.council-logo i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.council-list-tools {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  flex-wrap: wrap;
+  padding: 0 23px 16px;
+}
+.council-list-tools > label:first-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #dce6f3;
+  border-radius: 6px;
+  padding: 8px 10px;
+  color: #8ea4c0;
+  flex: 1;
+  max-width: 320px;
+}
+.council-list-tools input[type="text"],
+.council-list-tools label:first-child input {
+  border: 0;
+  outline: none;
+  font-size: 11px;
+  width: 100%;
+  min-width: 0;
+  background: transparent;
+  color: #587aa8;
+}
+.council-list-tools select {
+  border: 1px solid #dce6f3;
+  border-radius: 6px;
+  background: #fff;
+  padding: 8px 10px;
+  font-size: 10px;
+  color: #728eb3;
+}
+.council-metro-filter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: #8da4c1;
+}
+.council-metro-filter input {
+  accent-color: #3a70c3;
+}
+.council-watch-scroll {
+  max-height: 470px;
+  overflow: auto;
+}
+.council-watch-scroll th {
+  position: sticky;
+  top: 0;
+  background: #f5f8fd;
+  z-index: 1;
+}
+.council-name {
+  padding: 0;
+  font-size: 11px;
+  color: #5378aa;
+  font-weight: 550;
+  text-align: left;
+}
+.council-leader {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+}
+.council-leader i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.council-leader small {
+  font-size: 9px;
+  color: #8ca2c0;
+}
+.council-muted {
+  font-size: 10px;
+  color: #9caec6;
+}
+.council-gap {
+  display: block;
+  font-size: 8px;
+  color: #9bacc4;
+  margin-top: 5px;
+}
+.council-status {
+  display: inline-block;
+  padding: 5px 7px;
+  border: 1px solid #dce7f7;
+  border-radius: 5px;
+  font-size: 8px;
+  color: #7c96b9;
+  background: #f2f6fc;
+  white-space: nowrap;
+}
+.council-status.majority {
+  background: #eaf5ef;
+  border-color: #cde7d8;
+  color: #4c8466;
+}
+.council-status.hung {
+  background: #fbf4e5;
+  border-color: #eedfb9;
+  color: #a58343;
+}
+.council-status.drawn {
+  background: #f2edfa;
+  border-color: #e0d5f1;
+  color: #9574bb;
+}
+.council-status.unavailable {
+  background: #f2f4f8;
+  border-color: #e2e8f0;
+  color: #9aaac0;
+}
+.council-alert {
+  padding: 12px 23px;
+  background: #fff7e8;
+  color: #a0844f;
+  font-size: 10px;
+  line-height: 1.8;
+}
+.council-definitions {
+  padding: 17px 23px;
+  background: #f6f9ff;
+  border-block: 1px solid #e2eaf7;
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  color: #8299b8;
+}
+.council-definitions p {
+  font-size: 10px;
+  line-height: 1.9;
+  margin: 0 0 6px;
+}
+.council-definitions p:last-child {
+  margin-bottom: 0;
+}
+.council-definitions strong {
+  font-weight: 600;
+  color: #6a86ab;
+}
+.council-source {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 14px 23px;
+  font-size: 9px;
+  color: #91a5c1;
+}
+.council-source a {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #5e82b6;
+}
+.council-empty-note {
+  font-size: 11px;
+  line-height: 1.9;
+  padding: 23px;
+  color: #8da2bf;
+}
+.gis-hover-popup {
+  pointer-events: none !important;
+  z-index: 8;
+}
+.gis-hover-popup .maplibregl-popup-content {
+  padding: 0 !important;
+  border: 1px solid #d9e4f4;
+  border-radius: 11px;
+  box-shadow: 0 12px 35px #142d5a30;
+}
+.gis-hover-card {
+  padding: 17px 18px;
+  width: 265px;
+  max-width: 75vw;
+  color: #42638f;
+}
+.gis-hover-card > small {
+  font-size: 8px;
+  letter-spacing: 1.3px;
+  color: #96abc8;
+}
+.gis-hover-card h4 {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #2c4d7b;
+  margin: 7px 0 8px;
+}
+.gis-hover-card > p {
+  font-size: 9px;
+  line-height: 1.8;
+  color: #8aa0bf;
+  margin: 0 0 12px;
+}
+.gis-hover-parties > div {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 0;
+  border-top: 1px solid #eaf0f9;
+  font-size: 10px;
+}
+.gis-hover-parties i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+.gis-hover-parties img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+.gis-hover-parties span {
+  flex: 1;
+  color: #5d7eaa;
+}
+.gis-hover-parties strong {
+  font-weight: 600;
+  color: #416592;
+}
+.gis-hover-card > span {
+  display: block;
+  font-size: 8px;
+  color: #9bacc4;
+  margin-top: 7px;
+}
+.gis-hover-card footer {
+  display: block;
+  font-size: 8px;
+  padding: 10px 0 0;
+  margin-top: 11px;
+  border-top: 1px solid #e3ebf7;
+  color: #8ba1c0;
+  line-height: 1.7;
+}
+@media (max-width: 1100px) {
+  .council-summary-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .council-summary-grid strong {
+    font-size: 25px;
+  }
+  .council-source {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 7px;
+  }
+}
+@media (max-width: 560px) {
+  .council-results-heading {
+    padding: 22px 16px 18px;
+  }
+  .council-results-heading h2 {
+    font-size: 19px;
+  }
+  .council-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0 16px 20px;
+    gap: 9px;
+  }
+  .council-summary-grid > div {
+    padding: 15px 12px;
+  }
+  .council-summary-grid strong {
+    font-size: 23px;
+  }
+  .council-summary-grid span {
+    font-size: 9px;
+  }
+  .council-seat-visual {
+    padding: 0 16px 20px;
+  }
+  .council-subheading {
+    padding: 17px 16px;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .council-list-tools {
+    padding-inline: 16px;
+    gap: 9px;
+  }
+  .council-list-tools > label:first-child {
+    max-width: none;
+    flex-basis: 100%;
+  }
+  .council-definitions {
+    padding: 16px;
+  }
+  .council-source {
+    padding: 13px 16px;
+  }
+  .gis-hover-card {
+    width: 235px;
+    padding: 14px;
+  }
+  .gis-hover-card h4 {
+    font-size: 15px;
+  }
+}
+
+.gis-hover-card {
+  width: 238px;
+  max-width: 75vw;
+  padding: 14px 15px;
+  box-sizing: border-box;
+}
+.gis-hover-card h4 {
+  font-size: 15px;
+  line-height: 1.35;
+  margin: 0 0 12px;
+  letter-spacing: -0.2px;
+}
+.gis-hover-reporting {
+  margin-bottom: 10px;
+}
+.gis-hover-reporting > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  font-size: 10px;
+  color: #748aa7;
+  margin-bottom: 6px;
+}
+.gis-hover-reporting strong {
+  font-size: 10px;
+  font-weight: 600;
+  color: #42638f;
+  font-variant-numeric: tabular-nums;
+}
+.gis-hover-progress {
+  height: 4px;
+  border-radius: 9px;
+  background: #e7edf5;
+  overflow: hidden;
+}
+.gis-hover-progress i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #5180bd;
+}
+.gis-hover-parties > div {
+  padding: 7px 0;
+  gap: 7px;
+  font-size: 11px;
+}
+.gis-hover-parties > div:last-child {
+  padding-bottom: 0;
+}
+.gis-hover-parties img {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.gis-hover-parties i {
+  flex-shrink: 0;
+}
+.gis-hover-parties span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.gis-hover-parties strong {
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+.gis-hover-card > p {
+  margin: 10px 0 0;
+  font-size: 10px;
+}
+
+/* MapPopup owns a padded portal wrapper; this card supplies its own layout. */
+.gis-hover-popup {
+  padding: 0 !important;
+  border: 0 !important;
+  max-width: none !important;
+  width: 262px;
+  max-width: min(262px, 75vw) !important;
+  border-radius: 10px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.maplibregl-popup-content:has(.gis-hover-popup) {
+  padding: 0 !important;
+  border: 1px solid #d9e4f4;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 28px #142d5a24;
+}
+.gis-hover-popup .gis-hover-card {
+  width: 100%;
+  max-width: none;
+  padding: 0;
+  box-sizing: border-box;
+}
+.gis-hover-section {
+  padding: 12px 14px;
+  min-width: 0;
+  background: white;
+}
+.gis-hover-section + .gis-hover-section {
+  border-top: 1px solid #dce5f0;
+  background: #f6f9fd;
+}
+.gis-hover-section h4 {
+  overflow-wrap: anywhere;
+  margin: 0 0 9px;
+  font-size: 14px;
+  line-height: 1.3;
+}
+.gis-hover-section p {
+  margin: 8px 0 0;
+  font-size: 10px;
+  color: #8095ae;
+}
+.gis-hover-section .gis-hover-reporting {
+  margin-bottom: 7px;
+}
+.gis-hover-section .gis-hover-parties > div {
+  display: grid;
+  grid-template-columns: 5px 18px minmax(0, 1fr) auto;
+  padding: 5px 0;
+  gap: 7px;
+}
+.gis-hover-section .gis-hover-parties > div:not(:has(img)) {
+  grid-template-columns: 5px minmax(0, 1fr) auto;
+}
+.gis-hover-section .gis-hover-parties strong {
+  white-space: nowrap;
+}
+
+.gis-hover-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 7px;
+}
+.gis-hover-heading h4 {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+.gis-hover-ring {
+  position: relative;
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+}
+.gis-hover-ring svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+  fill: none;
+  stroke-width: 3;
+}
+.gis-hover-ring-track {
+  stroke: #e2e9f2;
+}
+.gis-hover-ring-fill {
+  stroke: #5180bd;
+  stroke-linecap: round;
+}
+.gis-hover-ring span {
+  font-size: 9px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: #42638f;
+  line-height: 1;
+}

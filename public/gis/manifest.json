@@ -1,0 +1,11 @@
+{
+  "eventId": 1887,
+  "preparedAt": "2026-11-05T09:16:34.155Z",
+  "source": "https://results.elections.org.za/ElectionMap/MapData/2026/",
+  "wards": 4485,
+  "votingDistricts": 23696,
+  "municipalities": 213,
+  "districtCouncils": 44,
+  "sha256": "3701bb45f10b5d7edeefe45b3572f226f723857f9f93d826df8c83def7013068",
+  "attribution": "Boundary source: Electoral Commission of South Africa; voting-district registry: Municipal Demarcation Board. 2026 event geometry."
+}
