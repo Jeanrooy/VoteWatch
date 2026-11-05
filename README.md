@@ -62,3 +62,5 @@ docker compose exec votewatch node -e "fetch('http://127.0.0.1:3001/api/health')
 ```
 
 Dokploy routes the domain to the internal port; the Compose file does not publish a host port. Use Docker Compose, rather than Docker Stack, because this file builds the image from source.
+
+Optional analytics: set `VITE_GTM_ID` in Dokploy Environment (for example, `GTM-N65DN6MQ`), then rebuild/redeploy. This public container ID is embedded at build time. Leaving it blank disables analytics.

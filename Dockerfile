@@ -5,7 +5,8 @@ RUN npm ci
 COPY index.html tsconfig.json vite.config.ts ./
 COPY src ./src
 COPY public ./public
-RUN npm run build && npm prune --omit=dev
+ARG VITE_GTM_ID
+RUN VITE_GTM_ID="$VITE_GTM_ID" npm run build && npm prune --omit=dev
 
 FROM node:24-bookworm-slim AS runtime
 RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates && rm -rf /var/lib/apt/lists/*

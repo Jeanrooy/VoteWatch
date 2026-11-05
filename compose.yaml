@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        VITE_GTM_ID: ${VITE_GTM_ID:-}
     restart: unless-stopped
     init: true
     environment:
