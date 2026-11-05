@@ -41,3 +41,22 @@ npm test
 ```
 
 Independent project. Results remain partial until officially declared. [Official IEC results](https://results.elections.org.za/dashboards/lge/) ? [Data and third-party credits](THIRD_PARTY_NOTICES.md).
+
+## Deploy with Dokploy
+
+Create a **Docker Compose** application connected to this repository, using `compose.yaml`. Deploy, then add your domain in Dokploy's **Domains** tab:
+
+- Service: `votewatch`
+- Container port: `3001`
+- HTTPS: enabled
+
+The frontend and API run together. No IEC credentials or separate database are needed. The `results-data` volume preserves cached results and logos across redeployments. Do not delete the volume when updating.
+
+For a local Docker check:
+
+```sh
+docker compose up --build -d
+docker compose exec votewatch node -e "fetch('http://127.0.0.1:3001/api/health').then(r=>r.text()).then(console.log)"
+```
+
+Dokploy routes the domain to the internal port; the Compose file does not publish a host port. Use Docker Compose, rather than Docker Stack, because this file builds the image from source.
