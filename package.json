@@ -9,7 +9,8 @@
     "preview": "vite preview --host 127.0.0.1",
     "server": "node --env-file-if-exists=.env server/index.mjs",
     "test": "node --test server/*.test.mjs",
-    "prepare:gis": "node scripts/prepare-geography.mjs"
+    "prepare:gis": "node scripts/prepare-geography.mjs",
+    "prepare:places": "node scripts/prepare-places.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.0",

@@ -77,7 +77,13 @@ function PlaceNames({
         (a, b) => a.priority - b.priority || a.name.localeCompare(b.name),
       )) {
         if (place.priority === 2 && zoom < 6.2) continue;
-        if (place.kind === "ward" && zoom < 7) continue;
+        if (place.kind === "ward" && zoom < 10) continue;
+        if (
+          ["suburb", "neighbourhood", "hamlet"].includes(place.kind) &&
+          zoom < 10
+        )
+          continue;
+        if (place.kind === "village" && zoom < 8) continue;
         if (!bounds.contains(place.center)) continue;
         const point = map.project(place.center),
           w = Math.min(150, place.name.length * 5.5 + 12);
@@ -119,13 +125,17 @@ function PlaceNames({
           latitude={place.center[1]}
         >
           <MarkerContent>
-            <button
-              className={`gis-place-name ${place.kind === "ward" ? "gis-place-name-ward" : ""}`}
-              onClick={() => onSelect(place)}
-              aria-label={`Explore ${place.name}`}
-            >
-              {place.name}
-            </button>
+            {["municipality", "ward"].includes(place.kind) ? (
+              <button
+                className={`gis-place-name ${place.kind === "ward" ? "gis-place-name-ward" : ""}`}
+                onClick={() => onSelect(place)}
+                aria-label={`Explore ${place.name}`}
+              >
+                {place.name}
+              </button>
+            ) : (
+              <span className="gis-geographic-name">{place.name}</span>
+            )}
           </MarkerContent>
         </MapMarker>
       ))}
@@ -220,6 +230,14 @@ export default function GISMap({
       : province
         ? `/gis/municipalities/${province.id}.geojson`
         : "/gis/municipalities.geojson";
+  const geographicPlaces = useJSON<{
+    places: {
+      id: string;
+      name: string;
+      kind: string;
+      center: [number, number];
+    }[];
+  }>("/gis/places.json");
   const provinceContext = useJSON<FeatureCollection>(
     national ? "/gis/provinces.geojson" : null,
   );
@@ -374,8 +392,32 @@ export default function GISMap({
           .filter((f) => f.kind === "ward")
           .map((f) => ({ ...f, priority: 3 }))
       : [];
-    return [...municipalities, ...local];
-  }, [registry, province?.id, municipality?.id, labelFeatures, national]);
+    const geographic = (geographicPlaces.data?.places ?? []).map((p) => ({
+      ...p,
+      priority:
+        p.kind === "city"
+          ? 0
+          : p.kind === "town"
+            ? 1
+            : p.kind === "village"
+              ? 2
+              : ["suburb", "neighbourhood"].includes(p.kind)
+                ? 3
+                : 4,
+    }));
+    return [
+      ...geographic,
+      ...municipalities.map((p) => ({ ...p, priority: 2 })),
+      ...local.map((p) => ({ ...p, priority: 5 })),
+    ];
+  }, [
+    registry,
+    province?.id,
+    municipality?.id,
+    labelFeatures,
+    national,
+    geographicPlaces.data,
+  ]);
   const legend = [
     ...new globalThis.Map(
       Object.values(mapResults ?? {})
@@ -706,6 +748,14 @@ export default function GISMap({
           <span className="gis-map-refresh">Refreshing boundaries…</span>
         )}
       </div>
+      <a
+        className="gis-place-credit"
+        href="https://www.openstreetmap.org/copyright"
+        target="_blank"
+        rel="noreferrer"
+      >
+        Place names: ? OpenStreetMap contributors
+      </a>
       <div className="gis-map-key">
         <strong>
           {layer === "leader"

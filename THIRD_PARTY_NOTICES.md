@@ -8,3 +8,5 @@ The MIT license in this repository applies to the application source. Data, part
 - Map components: [mapcn](https://www.mapcn.dev/), MIT. Map renderer and bundled worker: [MapLibre GL JS](https://github.com/maplibre/maplibre-gl-js), BSD 3-Clause; the bundled worker retains its license header.
 
 Dependency licenses are included with their npm packages. Prepared geography remains in the repository; downloaded research and runtime caches are excluded.
+
+- Geographic place names in `public/gis/places.json`: ? OpenStreetMap contributors, [ODbL 1.0](https://www.openstreetmap.org/copyright), extracted using Overpass. These orientation points are separate from IEC electoral boundaries and do not define voting areas. The local extract includes source identifiers, coordinates and source timestamp. Regenerate with `npm run prepare:places`.
