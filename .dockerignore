@@ -1,0 +1,15 @@
+.git
+node_modules
+dist
+data
+research
+docs
+.env
+.env.*
+*.log
+*.tsbuildinfo
+test-results
+playwright-report
+coverage
+.vscode
+.idea

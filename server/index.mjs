@@ -15,6 +15,7 @@ app.use((req, res, next) => {
   res.set("X-Content-Type-Options", "nosniff");
   next();
 });
+app.get("/api/health", (_req, res) => res.json({ status: "ok" }));
 app.get("/api/status", (_req, res) =>
   res.json({
     configured: false,
@@ -115,9 +116,11 @@ const poll = () =>
     .catch((e) => console.warn(`IEC public source: ${e.message}`));
 const timer = setInterval(poll, 10000);
 timer.unref();
-app.listen(Number(process.env.PORT ?? 3001), "127.0.0.1", () => {
+const host = process.env.HOST ?? "127.0.0.1";
+const port = Number(process.env.PORT ?? 3001);
+app.listen(port, host, () => {
   console.log(
-    "Election Observer API: http://127.0.0.1:3001 (public IEC JSON, no credentials)",
+    `Vote Watch: http://${host}:${port} (public IEC JSON, no credentials)`,
   );
   void poll();
 });
