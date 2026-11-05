@@ -478,6 +478,18 @@ export default function GISMap({
     ).values(),
   ];
   const hoverResult = hoverCard ? mapResults?.[hoverCard.id] : null;
+  const hoveredStation =
+    hoverCard?.kind === "station"
+      ? station.data?.data.features.find(
+          (f) => String(f.properties?.id) === hoverCard.id,
+        )
+      : null;
+  const hoverName =
+    hoverCard?.kind === "station"
+      ? (hoverResult?.stationName ??
+        hoveredStation?.properties?.name ??
+        hoverCard.name)
+      : hoverCard?.name.replace(/^[A-Z0-9]+ - /, "");
   const hoverProvinceId =
     province?.id ??
     registry.municipalities.find((m) => m.id === hoverCard?.id)?.provinceId;
@@ -681,7 +693,12 @@ export default function GISMap({
                     />
                   )}
                   <HoverResults
-                    name={hoverCard.name.replace(/^[A-Z0-9]+ - /, "")}
+                    name={String(hoverName ?? hoverCard.name)}
+                    subtitle={
+                      hoverCard.kind === "station"
+                        ? `Voting district ${hoverCard.id}`
+                        : undefined
+                    }
                     result={hoverResult}
                     focusParty={focusParty}
                   />
@@ -692,6 +709,20 @@ export default function GISMap({
               const c = (
                 f.geometry as { type: "Point"; coordinates: [number, number] }
               ).coordinates;
+              const id = String(f.properties?.id);
+              const venue =
+                mapResults?.[id]?.stationName ??
+                String(f.properties?.name ?? `Voting district ${id}`);
+              const showStationCard = () => {
+                setHover(venue);
+                setHoverCard({
+                  id,
+                  kind: "station",
+                  name: venue,
+                  longitude: c[0],
+                  latitude: c[1],
+                });
+              };
               return (
                 <MapMarker
                   key={String(f.properties?.id)}
@@ -701,19 +732,33 @@ export default function GISMap({
                   <MarkerContent>
                     <button
                       className="gis-station-pin"
+                      onMouseEnter={() => {
+                        if (!touchCard) showStationCard();
+                      }}
+                      onMouseLeave={() => {
+                        if (!touchCard) {
+                          setHoverCard(null);
+                          setHover("");
+                        }
+                      }}
+                      onFocus={showStationCard}
+                      onBlur={() => {
+                        if (!touchCard) setHoverCard(null);
+                      }}
                       onClick={() =>
                         openLocation(
                           "station",
                           String(f.properties?.id),
-                          String(f.properties?.name),
+                          venue,
                           c[0],
                           c[1],
                         )
                       }
-                      title={String(f.properties?.name)}
-                      aria-label={`Station ${f.properties?.name}`}
+                      title={`${venue} - Voting district ${id}`}
+                      aria-label={`${venue}, voting district ${id}`}
                     >
                       <MapPin size={18} />
+                      <span className="gis-station-name">{venue}</span>
                     </button>
                   </MarkerContent>
                 </MapMarker>
@@ -768,7 +813,12 @@ export default function GISMap({
                 />
               )}
               <HoverResults
-                name={hoverCard.name.replace(/^[A-Z0-9]+ - /, "")}
+                name={String(hoverName ?? hoverCard.name)}
+                subtitle={
+                  hoverCard.kind === "station"
+                    ? `Voting district ${hoverCard.id}`
+                    : undefined
+                }
                 result={hoverResult}
                 focusParty={focusParty}
               />
@@ -864,8 +914,10 @@ function HoverResults({
   result,
   loading = false,
   focusParty,
+  subtitle,
 }: {
   name: string;
+  subtitle?: string;
   result: FeatureResult | null | undefined;
   loading?: boolean;
   focusParty?: string | null;
@@ -881,6 +933,7 @@ function HoverResults({
         .slice(0, 3);
   return (
     <section className="gis-hover-section">
+      {subtitle && <div className="gis-station-card-id">{subtitle}</div>}
       <div className="gis-hover-heading">
         <h4>{name}</h4>
         <div
