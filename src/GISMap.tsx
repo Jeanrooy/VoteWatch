@@ -281,7 +281,7 @@ export default function GISMap({
       ? `/api/results?province=${hoverProvinceId}&ballot=${results?.ballot ?? "combined"}`
       : null,
     revision,
-    60000,
+    10000,
   );
   const provinceSummary: FeatureResult | null = national
     ? hoverProvinceId

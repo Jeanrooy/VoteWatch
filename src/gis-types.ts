@@ -1,3 +1,4 @@
+import { retainUnchangedFields } from "./lib/refresh-data";
 import { useEffect, useState } from "react";
 export type Bounds = [number, number, number, number];
 export type Province = {
@@ -118,14 +119,21 @@ export function useJSON<T>(url: string | null, version = 0, interval = 0) {
     if (!url) return;
     const ac = new AbortController();
     let active = true;
-    async function get() {
-      setState((s) =>
-        s.url === url
-          ? { ...s, loading: true }
-          : { url, data: null, error: "", loading: true },
-      );
+    let inFlight = false;
+    async function get(background = false) {
+      if (inFlight) return;
+      inFlight = true;
+      if (!background)
+        setState((s) =>
+          s.url === url
+            ? { ...s, loading: true }
+            : { url, data: null, error: "", loading: true },
+        );
       try {
-        const r = await fetch(url!, { signal: ac.signal });
+        const r = await fetch(url!, {
+          signal: ac.signal,
+          cache: interval ? "no-store" : "default",
+        });
         if (!r.ok) {
           let error = `Request failed (${r.status})`;
           try {
@@ -134,7 +142,13 @@ export function useJSON<T>(url: string | null, version = 0, interval = 0) {
           throw Error(error);
         }
         const data = (await r.json()) as T;
-        if (active) setState({ url, data, error: "", loading: false });
+        if (active)
+          setState((s) => ({
+            url,
+            data: retainUnchangedFields(s.url === url ? s.data : null, data),
+            error: "",
+            loading: false,
+          }));
       } catch (e) {
         if (active && !ac.signal.aborted)
           setState((s) => ({
@@ -142,10 +156,12 @@ export function useJSON<T>(url: string | null, version = 0, interval = 0) {
             error: e instanceof Error ? e.message : "Data unavailable",
             loading: false,
           }));
+      } finally {
+        inFlight = false;
       }
     }
     void get();
-    const timer = interval ? setInterval(() => void get(), interval) : null;
+    const timer = interval ? setInterval(() => void get(true), interval) : null;
     return () => {
       active = false;
       ac.abort();

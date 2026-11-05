@@ -3,6 +3,7 @@
 South African local election results on an interactive map. Explore provinces, municipalities, wards and voting districts, or select a party to see where it leads.
 
 - Published IEC votes, party shares, seats and council counts.
+- Background updates every 10 seconds, preserving the current map and scroll position.
 - Party maps with location drill-down and shareable links.
 - Desktop sidebar and mobile tap-to-explore results cards.
 

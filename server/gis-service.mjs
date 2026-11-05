@@ -374,16 +374,14 @@ function featureSummary(result, expected, received, available = true) {
             share: leader.share,
           }
         : null,
-    parties: parties
-      .slice(0, 3)
-      .map((p) => ({
-        id: p.partyId,
-        label: p.label,
-        color: p.color,
-        votes: p.votes,
-        share: p.share,
-        logoUrl: p.logoUrl,
-      })),
+    parties: parties.slice(0, 3).map((p) => ({
+      id: p.partyId,
+      label: p.label,
+      color: p.color,
+      votes: p.votes,
+      share: p.share,
+      logoUrl: p.logoUrl,
+    })),
     tie,
   };
 }
@@ -397,7 +395,7 @@ export class GISService {
   }
   async csv(m, dictionary) {
     const url = `https://results.elections.org.za/home/LGEPublicReports/1887/Downloadable%20Party%20Results/${encodeURIComponent(m.provinceId === "3" ? "GP" : m.provinceId === "4" ? "KN" : m.provinceId === "5" ? "MP" : m.provinceId === "6" ? "NC" : m.provinceId === "7" ? "LP" : m.provinceId === "8" ? "NW" : m.provinceId === "9" ? "WC" : m.provinceId === "2" ? "FS" : "EC")}/${encodeURIComponent(m.code)}.csv`;
-    return this.documents.get(`csv:1887:${m.id}`, url, 300000, (text) =>
+    return this.documents.get(`csv:1887:${m.id}`, url, 10000, (text) =>
       parseBallotCSV(text, m, dictionary),
     );
   }

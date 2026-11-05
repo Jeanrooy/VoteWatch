@@ -21,7 +21,7 @@ app.get("/api/status", (_req, res) =>
     eventId: source.events?.["2026"] ?? null,
     mode: "public-files",
     message:
-      "Credential-free IEC dashboard JSON connector. National snapshots refresh every five minutes. Detailed files load on demand.",
+      "Credential-free IEC dashboard JSON connector. National snapshots refresh every ten seconds. Detailed files load on demand.",
     lastSuccess: source.lastSuccess,
     lastError: source.lastError,
   }),
@@ -113,7 +113,7 @@ const poll = () =>
   source
     .get("2026", "national")
     .catch((e) => console.warn(`IEC public source: ${e.message}`));
-const timer = setInterval(poll, 300000);
+const timer = setInterval(poll, 10000);
 timer.unref();
 app.listen(Number(process.env.PORT ?? 3001), "127.0.0.1", () => {
   console.log(

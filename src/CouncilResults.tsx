@@ -107,7 +107,7 @@ export default function CouncilResults({
   const state = useJSON<CouncilPacket>(
     "/api/councils?" + q,
     revision + retry,
-    60000,
+    10000,
   );
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("all");

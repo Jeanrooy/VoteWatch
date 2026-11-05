@@ -149,7 +149,7 @@ export class PublicSource {
   constructor({
     fetcher = download,
     root = "data/public",
-    ttl = 300000,
+    ttl = 10000,
     now = Date.now,
   } = {}) {
     this.fetcher = fetcher;
@@ -193,7 +193,10 @@ export class PublicSource {
     }
     if (prior && kind !== "parties")
       prior = { ...prior, summary: summarize(prior.data) };
-    if (prior && this.now() - prior.checkedAt < this.ttl)
+    if (
+      prior &&
+      this.now() - prior.checkedAt < (kind === "parties" ? 3600000 : this.ttl)
+    )
       return { ...prior, stale: false };
     if (this.pending.has(key)) return this.pending.get(key);
     if (this.now() < this.cooldown) {

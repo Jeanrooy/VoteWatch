@@ -1,3 +1,4 @@
+import { retainUnchangedFields } from "./lib/refresh-data";
 import { useEffect, useState } from "react";
 export type LiveRow = {
   id: string;
@@ -38,8 +39,11 @@ export function useLiveResults() {
   useEffect(() => {
     const controller = new AbortController();
     let active = true;
-    async function get() {
-      setLoading(true);
+    let inFlight = false;
+    async function get(background = false) {
+      if (inFlight) return;
+      inFlight = true;
+      if (!background) setLoading(true);
       try {
         const r = await fetch("/api/live", { signal: controller.signal });
         const body = await r.json();
@@ -47,7 +51,7 @@ export function useLiveResults() {
         if (body.eventId !== 1887 || !body.regions || !body.national)
           throw Error("Unexpected live response.");
         if (active) {
-          setSnapshot(body);
+          setSnapshot((previous) => retainUnchangedFields(previous, body));
           setError(body.stale ? (body.error ?? "Retained snapshot") : "");
         }
       } catch (e) {
@@ -56,11 +60,12 @@ export function useLiveResults() {
             e instanceof Error ? e.message : "Live results unavailable.",
           );
       } finally {
+        inFlight = false;
         if (active) setLoading(false);
       }
     }
     void get();
-    const timer = setInterval(() => void get(), 60000);
+    const timer = setInterval(() => void get(true), 10000);
     return () => {
       active = false;
       controller.abort();

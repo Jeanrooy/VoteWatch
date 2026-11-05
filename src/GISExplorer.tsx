@@ -59,7 +59,7 @@ export default function GISExplorer() {
   const result = useJSON<Results>(
     "/api/results?" + queryFor(selection, ballot),
     revision,
-    60000,
+    10000,
   );
   const data = result.data;
   const [focusParty, setFocusParty] = useState<string | null>(() =>
@@ -104,7 +104,7 @@ export default function GISExplorer() {
   const council = useJSON<CouncilPacket>(
     "/api/councils?" + councilQuery,
     revision,
-    60000,
+    10000,
   );
   const [allParties, setAllParties] = useState(
     () => new URLSearchParams(location.search).get("detail") === "parties",
@@ -193,13 +193,22 @@ export default function GISExplorer() {
   useEffect(() => {
     const el = partyList.current;
     if (!el) return;
-    el.scrollTop = 0;
     checkScroll();
     const observer = new ResizeObserver(checkScroll);
     observer.observe(el);
     for (const child of el.children) observer.observe(child);
     return () => observer.disconnect();
   }, [data, focusParty]);
+  useEffect(() => {
+    if (partyList.current) partyList.current.scrollTop = 0;
+  }, [
+    focusParty,
+    selection.province,
+    selection.municipality,
+    selection.district,
+    selection.ward,
+    selection.vd,
+  ]);
   const province = reg?.provinces.find((p) => p.id === selection.province),
     municipality = reg?.municipalities.find(
       (m) => m.id === selection.municipality,
