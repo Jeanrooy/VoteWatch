@@ -92,7 +92,14 @@ export default function GISMap({
     if (touchCard) {
       setHover(name);
       setHoverCard({ id, kind, name, longitude, latitude });
-    } else onNavigate(kind, id);
+    } else exploreLocation(kind, id);
+  }
+
+  function exploreLocation(kind: string, id: string) {
+    const parent = registry.municipalities.find((m) => m.id === id)?.provinceId;
+    if (national && kind === "municipality" && parent)
+      onNavigate("province", parent);
+    else onNavigate(kind, id);
   }
 
   const [hoverCard, setHoverCard] = useState<{
@@ -296,16 +303,14 @@ export default function GISMap({
           progress: provinceData.data.reporting?.percent ?? null,
           leader: null,
           tie: false,
-          parties: provinceData.data.rows
-            .slice(0, 3)
-            .map((p) => ({
-              id: p.partyId,
-              label: p.label,
-              color: p.color,
-              votes: p.votes,
-              share: p.share,
-              logoUrl: p.logoUrl,
-            })),
+          parties: provinceData.data.rows.slice(0, 3).map((p) => ({
+            id: p.partyId,
+            label: p.label,
+            color: p.color,
+            votes: p.votes,
+            share: p.share,
+            logoUrl: p.logoUrl,
+          })),
         }
       : null;
 
@@ -579,23 +584,18 @@ export default function GISMap({
               />
             </div>
             <div className="gis-touch-card-actions">
-              {national && hoverProvince && (
-                <button
-                  onClick={() => onNavigate("province", hoverProvince.id)}
-                >
-                  View province
-                </button>
-              )}
               <button
                 className="gis-touch-explore"
-                onClick={() => onNavigate(hoverCard.kind, hoverCard.id)}
+                onClick={() => exploreLocation(hoverCard.kind, hoverCard.id)}
               >
                 View{" "}
-                {hoverCard.kind === "municipality"
-                  ? "municipality"
-                  : hoverCard.kind === "station"
-                    ? "voting district"
-                    : hoverCard.kind}{" "}
+                {national
+                  ? "province"
+                  : hoverCard.kind === "municipality"
+                    ? "municipality"
+                    : hoverCard.kind === "station"
+                      ? "voting district"
+                      : hoverCard.kind}{" "}
                 <ArrowRight size={13} />
               </button>
             </div>
