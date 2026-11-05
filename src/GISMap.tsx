@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { booleanPointInPolygon } from "@turf/boolean-point-in-polygon";
 import type { FeatureCollection, Geometry } from "geojson";
 import { pointOnFeature } from "@turf/point-on-feature";
 import {
@@ -77,7 +78,7 @@ function PlaceNames({
         (a, b) => a.priority - b.priority || a.name.localeCompare(b.name),
       )) {
         if (place.priority === 2 && zoom < 6.2) continue;
-        if (place.kind === "ward" && zoom < 10) continue;
+
         if (
           ["suburb", "neighbourhood", "hamlet"].includes(place.kind) &&
           zoom < 10
@@ -129,7 +130,7 @@ function PlaceNames({
               <button
                 className={`gis-place-name ${place.kind === "ward" ? "gis-place-name-ward" : ""}`}
                 onClick={() => onSelect(place)}
-                aria-label={`Explore ${place.name}`}
+                aria-label={`Explore ${place.kind === "ward" ? "Ward " : ""}${place.name}`}
               >
                 {place.name}
               </button>
@@ -390,7 +391,11 @@ export default function GISMap({
     const local = municipality
       ? labelFeatures
           .filter((f) => f.kind === "ward")
-          .map((f) => ({ ...f, priority: 3 }))
+          .map((f) => ({
+            ...f,
+            name: f.name.replace("Ward ", ""),
+            priority: -1,
+          }))
       : [];
     const geographic = (geographicPlaces.data?.places ?? []).map((p) => ({
       ...p,
@@ -405,11 +410,49 @@ export default function GISMap({
                 ? 3
                 : 4,
     }));
+    const boundaryFeatures = ward
+      ? wardContext.data?.features.filter(
+          (f) => String(f.properties?.id) === ward.id,
+        )
+      : source?.features.filter(
+          (f) =>
+            !district ||
+            municipality ||
+            f.properties?.districtId === district.id,
+        );
+    const indexedBoundaries = boundaryFeatures?.map((f) => {
+      const box = [Infinity, Infinity, -Infinity, -Infinity];
+      const visit = (c: unknown) => {
+        if (!Array.isArray(c)) return;
+        if (typeof c[0] === "number") {
+          box[0] = Math.min(box[0], c[0]);
+          box[1] = Math.min(box[1], c[1]);
+          box[2] = Math.max(box[2], c[0]);
+          box[3] = Math.max(box[3], c[1]);
+        } else c.forEach(visit);
+      };
+      if ("coordinates" in f.geometry) visit(f.geometry.coordinates);
+      return { feature: f, box };
+    });
+    // Bounds prefilter accelerates exact polygon membership, including holes.
+    const inSelection = (point: [number, number]) =>
+      Boolean(
+        indexedBoundaries?.some(
+          ({ feature: f, box }) =>
+            point[0] >= box[0] &&
+            point[0] <= box[2] &&
+            point[1] >= box[1] &&
+            point[1] <= box[3] &&
+            (f.geometry.type === "Polygon" ||
+              f.geometry.type === "MultiPolygon") &&
+            booleanPointInPolygon(point, f.geometry),
+        ),
+      );
     return [
+      ...local,
       ...geographic,
       ...municipalities.map((p) => ({ ...p, priority: 2 })),
-      ...local.map((p) => ({ ...p, priority: 5 })),
-    ];
+    ].filter((p) => inSelection(p.center));
   }, [
     registry,
     province?.id,
@@ -417,6 +460,10 @@ export default function GISMap({
     labelFeatures,
     national,
     geographicPlaces.data,
+    source,
+    wardContext.data,
+    ward?.id,
+    district?.id,
   ]);
   const legend = [
     ...new globalThis.Map(
