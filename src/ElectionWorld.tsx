@@ -685,7 +685,7 @@ export default function ElectionWorld() {
               <div>
                 <span>Voting districts reporting</span>
                 <strong>
-                  {data.progress === null ? "?" : data.progress.toFixed(1)}%
+                  {data.progress === null ? "?" : data.progress.toFixed(0)}%
                 </strong>
               </div>
               <div className="world-progress">
@@ -719,7 +719,7 @@ export default function ElectionWorld() {
                     </div>
                   </div>
                   <strong>
-                    {p.share.toFixed(1)}
+                    {p.share.toFixed(2)}
                     <small>%</small>
                   </strong>
                 </div>
@@ -760,7 +760,7 @@ export default function ElectionWorld() {
               value={separation}
               onChange={(e) => setSeparation(Number(e.target.value))}
             />
-            <small>{Math.round((separation / 2) * 100)}%</small>
+            <small>{((separation / 2) * 100).toFixed(2)}%</small>
           </label>
         </section>
         {about && (

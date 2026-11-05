@@ -681,7 +681,7 @@ function HoverResults({
           }
           title={
             progress != null
-              ? `${progress.toFixed(1)}% reporting`
+              ? `${progress.toFixed(0)}% reporting`
               : "Reporting unavailable"
           }
         >
@@ -717,7 +717,7 @@ function HoverResults({
                   />
                 )}
                 <span title={p.label}>{p.label}</span>
-                <strong>{p.share.toFixed(1)}%</strong>
+                <strong>{p.share.toFixed(2)}%</strong>
               </div>
             ))}
         </div>

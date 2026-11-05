@@ -288,7 +288,7 @@ export default function GISExplorer() {
           q(r.partyName),
           q(r.candidate ?? ""),
           r.votes,
-          r.share.toFixed(4),
+          r.share.toFixed(2),
           data.source?.fetchedAt ?? "",
         ].join(","),
       ),
@@ -404,7 +404,7 @@ export default function GISExplorer() {
                     title="Voting districts reporting"
                   >
                     {data?.reporting?.percent != null
-                      ? `${data.reporting.percent.toFixed(1)}%`
+                      ? `${data.reporting.percent.toFixed(0)}%`
                       : "\u2014"}
                     <small>reporting</small>
                   </span>
@@ -492,7 +492,7 @@ export default function GISExplorer() {
                                   : r.label}
                               </strong>
                               <b>
-                                {r.share.toFixed(1)}
+                                {r.share.toFixed(2)}
                                 <small>%</small>
                               </b>
                             </button>
@@ -548,7 +548,7 @@ export default function GISExplorer() {
                               onClick={() => navigate(p.kind, p.id)}
                             >
                               <span>{p.name.replace(/^[A-Z0-9]+ - /, "")}</span>
-                              <strong>{p.share.toFixed(1)}%</strong>
+                              <strong>{p.share.toFixed(2)}%</strong>
                               <ChevronRight size={13} />
                             </button>
                           ))}
